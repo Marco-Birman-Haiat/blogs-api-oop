@@ -16,6 +16,10 @@ export class UserRepositoryInMemoryImpl implements UserRepository {
     return this.users.map((user) => this.getRecordFromEntity(user))
   }
 
+  // async getAll(): Promise<UserRecord[]> {
+  //   const allUsers = await connection.query('SELECT * FROM users')
+  // }
+
   async getByEmail(email: string): Promise<UserRecord | null> {
     const foundUser = this.users.filter((user) => user.email == email);
     
