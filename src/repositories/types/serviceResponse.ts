@@ -1,5 +1,5 @@
-type ServiceResponseTypeError = 'UNATHORIZED' | 'NOT_FOUND' | 'INVALID_DATA' | 'UNPROCESSABLE_DATA';
-type ServiceResponseTypeSuccess = 'OK' | 'CREATED';
+export type ServiceResponseTypeError = 'UNATHORIZED' | 'NOT_FOUND' | 'INVALID_DATA' | 'UNPROCESSABLE_DATA';
+export type ServiceResponseTypeSuccess = 'OK' | 'CREATED';
 
 type ServiceResponseSuccess<T> = {
   type: ServiceResponseTypeSuccess,
