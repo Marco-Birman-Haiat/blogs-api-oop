@@ -1,12 +1,12 @@
 import express from 'express';
-import { UserRepositoryInMemoryImpl } from '../repositories/user.repository';
 import { UserValidationImpl } from '../services/validations/userValidations';
 import { UserServiceImpl } from '../services/user.service';
 import { UserControllerImpl } from '../controllers/user.controller';
+import UserRepositoryImpl from '../repositories/user.repository';
 
 const userRoute = express.Router();
 
-const userRepository = new UserRepositoryInMemoryImpl();
+const userRepository = new UserRepositoryImpl();
 const userValidations = new UserValidationImpl();
 const userService = new UserServiceImpl(userRepository, userValidations);
 const userController = new UserControllerImpl(userService);
