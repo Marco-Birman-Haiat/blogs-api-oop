@@ -1,13 +1,9 @@
-import { Model, DataTypes, ModelDefined, Optional, Sequelize } from 'sequelize';
-const sequelize = new Sequelize('sqlite::memory:');
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
-import db from './index';
-import { UserEntity } from '../../repositories/entities/user.entity';
+import db from '.';
+import BlogPostModel from './blogPost.model';
 
-export type UserInputtableFields = Optional<UserEntity, 'id'>;
-
-type UserSequelizeModelCreator = ModelDefined<UserEntity, UserInputtableFields>;
-
+const sequelize = db;
 
 class UserModel extends Model {}
 
@@ -23,7 +19,11 @@ UserModel.init(
     sequelize,
     underscored: true,
     timestamps: false,
+    tableName: 'users'
   }
 )
+
+UserModel.hasMany(BlogPostModel, { as: 'blog_posts', foreignKey: 'userId' });
+BlogPostModel.belongsTo(UserModel, { as: 'user', foreignKey: 'userId' });
 
 export default UserModel;

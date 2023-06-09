@@ -1,3 +1,5 @@
+import BlogPostModel from "../database/models/blogPost.model";
+import UserModel from "../database/models/user.model";
 import { UserEntity } from "./entities/user.entity";
 import UserRecord, { UserInput } from "./interfaces/user.record";
 
@@ -10,54 +12,36 @@ export interface UserRepository {
 }
 
 export class UserRepositoryInMemoryImpl implements UserRepository {
-  private users: UserEntity[] = [];
-
   async getAll(): Promise<UserRecord[]> {
-    return this.users.map((user) => this.getRecordFromEntity(user))
+    const allUsers = await UserModel.findAll({ include: { model: BlogPostModel, as: 'blog_posts'}});
+    console.log(allUsers);
+    return allUsers.map((user) => this.getRecordFromModel(user))
   }
 
-  // async getAll(): Promise<UserRecord[]> {
-  //   const allUsers = await connection.query('SELECT * FROM users')
-  // }
-
   async getByEmail(email: string): Promise<UserRecord | null> {
-    const foundUser = this.users.filter((user) => user.email == email);
+    const foundUser = await UserModel.findOne({ where: { email }});
     
-    if (!foundUser.length) return null
+    if (!foundUser) return null
 
-    return this.getRecordFromEntity(foundUser[0]);
+    return this.getRecordFromModel(foundUser);
   }
 
   async create(user: UserInput): Promise<UserRecord> {
-    const newId = this.getNewIndex();
-    const userToCreate = {...user, id: newId };
+    const createdUser = await UserModel.create(user);
     
-    this.users.push(userToCreate);
-    return this.getRecordFromEntity(userToCreate);
+    return this.getRecordFromModel(createdUser);
   }
 
   async delete(id: number): Promise<void> {
-    const filteredUsers = this.users.filter((user) => user.id !== id);
-    this.users = filteredUsers;
+    UserModel.destroy({ where: { id }})
   }
 
-  getNewIndex(): number {
-    if (!this.users.length) return 1;
-
-    const largestId = this.users.reduce((acc, user) => {
-      if (user.id > acc) return user.id;
-      return acc
-    }, this.users[0].id);
-
-    return largestId + 1;
-  }
-
-  private getRecordFromEntity(entity: UserEntity): UserRecord {
+  private getRecordFromModel(entity: UserModel): UserRecord {
     return {
-      displayName: entity.displayName,
-      email: entity.email,
-      image: entity.image,
-      id: entity.id,
+      displayName: entity.dataValues.displayName,
+      email: entity.dataValues.email,
+      image: entity.dataValues.image,
+      id: entity.dataValues.id,
     };
   }
 
