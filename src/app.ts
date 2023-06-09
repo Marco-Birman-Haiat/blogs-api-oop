@@ -1,6 +1,7 @@
 import express from 'express';
 import userRoute from './routes/userRoute';
 import categoryRoute from './routes/categoryRoute';
+import blogPostRoute from './routes/blogPostRoute';
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.use(express.json());
 
 app.use('/users', userRoute);
 app.use('/categories', categoryRoute);
+app.use('/blogposts', blogPostRoute);
 
 export default app;
