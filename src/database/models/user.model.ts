@@ -2,6 +2,8 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 
 import db from '.';
 import BlogPostModel from './blogPost.model';
+import CategoryModel from './category.model';
+import BlogPostCategoryModel from './blogPostCategory.model';
 
 const sequelize = db;
 
@@ -25,5 +27,19 @@ UserModel.init(
 
 UserModel.hasMany(BlogPostModel, { as: 'blog_posts', foreignKey: 'userId' });
 BlogPostModel.belongsTo(UserModel, { as: 'user', foreignKey: 'userId' });
+
+BlogPostModel.belongsToMany(CategoryModel, {
+  as: 'categories',
+  through: BlogPostCategoryModel,
+  foreignKey: 'postId',
+  otherKey: 'categoryId',
+});
+
+CategoryModel.belongsToMany(BlogPostModel, {
+  as: 'posts',
+  through: BlogPostCategoryModel,
+  foreignKey: 'categoryId',
+  otherKey: 'postId',
+});
 
 export default UserModel;

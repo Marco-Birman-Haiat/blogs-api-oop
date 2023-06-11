@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 const secret = process.env.JTW_SECRET || 'minhaSenhaMBH';
 
-type TokenPayload = {
+export type TokenPayload = {
   id: number; 
   email: string;
 }

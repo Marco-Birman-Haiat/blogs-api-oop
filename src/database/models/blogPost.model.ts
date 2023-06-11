@@ -1,17 +1,9 @@
 import { Model, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes } from 'sequelize';
 
 import db from '.';
-import UserModel from './user.model';
 const sequelize = db;
 
-class BlogPostModel extends Model {
-  // declare id: number;
-  // declare title: string;
-  // declare content: string;
-  // declare userId: ForeignKey<number>;
-  // declare published: Date;
-  // declare updated: Date;
-}
+class BlogPostModel extends Model {}
 
 
 BlogPostModel.init(

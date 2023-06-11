@@ -14,7 +14,6 @@ export interface UserRepository {
 export default class UserRepositoryImpl implements UserRepository {
   async getAll(): Promise<UserRecord[]> {
     const allUsers = await UserModel.findAll({ include: { model: BlogPostModel, as: 'blog_posts'}});
-    console.log(allUsers);
     return allUsers.map((user) => this.getRecordFromModel(user))
   }
 

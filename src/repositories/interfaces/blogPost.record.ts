@@ -1,3 +1,4 @@
+import { CategoryRecord } from "./category.record";
 import UserRecord from "./user.record";
 
 export type BlogPostRecord = {
@@ -7,11 +8,19 @@ export type BlogPostRecord = {
   published: Date;
   updated: Date;
   user?: UserRecord;
+  categories?: CategoryRecord[];
 }
 
 export type BlogPostInput = {
   title: string;
+  userId: number;
   content: string;
   published: Date;
   updated: Date;
+}
+
+export type BlogPostUserInput = {
+  title: string;
+  userId: number;
+  content: string;
 }
