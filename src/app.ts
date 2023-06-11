@@ -3,6 +3,7 @@ import userRoute from './routes/userRoute';
 import categoryRoute from './routes/categoryRoute';
 import blogPostRoute from './routes/blogPostRoute';
 import loginRoute from './routes/loginRoute';
+import { errorMiddleware } from './middlewares/error.middleware';
 
 const app = express();
 
@@ -17,5 +18,7 @@ app.use('/users', userRoute);
 app.use('/categories', categoryRoute);
 app.use('/blogposts', blogPostRoute);
 app.use('/login', loginRoute);
+
+app.use(errorMiddleware);
 
 export default app;
