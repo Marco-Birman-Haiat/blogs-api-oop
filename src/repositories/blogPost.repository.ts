@@ -4,11 +4,13 @@ import BlogPostModel from "../database/models/blogPost.model";
 import BlogPostCategoryModel from "../database/models/blogPostCategory.model";
 import CategoryModel from "../database/models/category.model";
 import UserModel from "../database/models/user.model";
-import { BlogPostInput, BlogPostRecord } from "./interfaces/blogPost.record";
+import { BlogPostInput, BlogPostRecord, BlogPostUserInputEdit } from "./interfaces/blogPost.record";
 
 export interface BlogPostRepository {
   getAll(): Promise<BlogPostRecord[]>;
+  getById(postId: number): Promise<BlogPostRecord | null>;
   create(blogPost: BlogPostInput, categoryIds: number[]): Promise<BlogPostRecord>;
+  update(blogPost: BlogPostUserInputEdit, postId: number): Promise<void>;
 }
 
 export default class BlogPostRepositoryImpl implements BlogPostRepository {
@@ -23,6 +25,18 @@ export default class BlogPostRepositoryImpl implements BlogPostRepository {
     return allPosts.map((post) => post.dataValues);
   }
 
+  async getById(postId: number): Promise<BlogPostRecord | null> {
+    const foundPost = await BlogPostModel.findByPk(postId, {
+      include: [
+        { model: UserModel, as: 'user', attributes: { exclude: ['password'] } },
+        { model: CategoryModel, as: 'categories' },
+      ]
+    });
+
+    if (!foundPost) return null;
+    return foundPost.dataValues;
+  }
+
   async create(blogPost: BlogPostInput, categoryIds: number[]): Promise<BlogPostRecord> {
     const createdBlogPost = await db.transaction(async (blogPostCreateTransaction) => {
       const createBlogPost = await this.insertBlogPost(blogPost, blogPostCreateTransaction);
@@ -31,6 +45,10 @@ export default class BlogPostRepositoryImpl implements BlogPostRepository {
       return createBlogPost;
     });
     return createdBlogPost.dataValues;
+  }
+
+  async update(blogPost: BlogPostUserInputEdit, postId: number): Promise<void> {
+    await BlogPostModel.update(blogPost, { where: { id: postId } });
   }
 
   private async insertBlogPostCategories(categoryIds: number[], createdPost: BlogPostModel, transaction: Transaction) {
@@ -46,7 +64,7 @@ export default class BlogPostRepositoryImpl implements BlogPostRepository {
 
   private async insertBlogPost(blogPost: BlogPostInput, transaction: Transaction): Promise<BlogPostModel> {
     const createBlogPost = await BlogPostModel
-        .create(blogPost, { transaction });
+      .create(blogPost, { transaction });
     return createBlogPost;
   }
 

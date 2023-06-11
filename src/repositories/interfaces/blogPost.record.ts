@@ -24,3 +24,8 @@ export type BlogPostUserInput = {
   userId: number;
   content: string;
 }
+
+export type BlogPostUserInputEdit = {
+  title: string;
+  content: string;
+}
