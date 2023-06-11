@@ -4,4 +4,5 @@ export const validateCategoryCreate = (req: Request, res: Response, next: NextFu
   const { name } = req.body;
 
   if (!name) return next({ type: 400, message: '"name" is required' });
+  return next();
 }

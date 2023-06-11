@@ -28,7 +28,7 @@ export class CategoryServiceImpl implements CategoryService {
 
   async create(category: CategoryInput): Promise<CategoryServiceResponse<CategoryRecord>> {
     const createdCategory = await this.categoryRepository.create(category);
-
+    
     return { type: 'CREATED', data: createdCategory };
   }
 }

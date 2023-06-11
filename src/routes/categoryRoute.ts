@@ -3,6 +3,7 @@ import { CategoryRepositoryImpl } from '../repositories/category.repository';
 import { CategoryServiceImpl } from '../services/category.service';
 import { CategoryControllerImpl } from '../controllers/category.controller';
 import { validateCategoryCreate } from '../middlewares/category.middleware';
+import { validateJWT } from '../middlewares/token';
 
 const categoryRoute = express.Router();
 
@@ -12,6 +13,6 @@ const categoryController = new CategoryControllerImpl(categoryService);
 
 categoryRoute.get('/', async (req, res) => categoryController.getAll(req, res));
 categoryRoute.get('/:id', async (req, res) => categoryController.getById(req, res));
-categoryRoute.post('/', validateCategoryCreate, async (req, res) => categoryController.create(req, res));
+categoryRoute.post('/', validateJWT, validateCategoryCreate, async (req, res) => categoryController.create(req, res));
 
 export default categoryRoute;
