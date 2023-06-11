@@ -1,13 +1,14 @@
-import { ServiceResponseTypeError } from "../repositories/types/serviceResponse";
+import { ResponseTypeError } from "../repositories/types/reponse";
 
 
-const mapHttpStatus: Record<ServiceResponseTypeError, number> = {
+const mapHttpStatus: Record<ResponseTypeError, number> = {
   INVALID_DATA: 400,
   NOT_FOUND: 404,
   UNATHORIZED: 401,
   UNPROCESSABLE_DATA: 422,
+  CONFLICT: 409,
 };
 
-const getErrorCode = (type: ServiceResponseTypeError): number => mapHttpStatus[type];
+const getErrorCode = (type: ResponseTypeError): number => mapHttpStatus[type];
 
 export default getErrorCode;
