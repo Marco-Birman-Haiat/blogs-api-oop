@@ -22,7 +22,7 @@ export class CategoryServiceImpl implements CategoryService {
   async getById(id: number): Promise<CategoryServiceResponse<CategoryRecord>> {
     const foundCategory = await this.categoryRepository.getById(id);
 
-    if (!foundCategory) return { type: 'NOT_FOUND', data: { message: 'user not found' } };
+    if (!foundCategory) return { type: 'NOT_FOUND', data: { message: 'category not found' } };
     return { type: 'OK', data: foundCategory }
   }
 
