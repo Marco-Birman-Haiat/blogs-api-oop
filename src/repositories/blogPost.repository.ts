@@ -26,7 +26,6 @@ export default class BlogPostRepositoryImpl implements BlogPostRepository {
   async create(blogPost: BlogPostInput, categoryIds: number[]): Promise<BlogPostRecord> {
     const createdBlogPost = await db.transaction(async (blogPostCreateTransaction) => {
       const createBlogPost = await this.insertBlogPost(blogPost, blogPostCreateTransaction);
-      
       await this.insertBlogPostCategories(categoryIds, createBlogPost, blogPostCreateTransaction);
 
       return createBlogPost;

@@ -15,6 +15,7 @@ const userController = new UserControllerImpl(userService);
 
 userRoute.post('/', validateUserCreate, async (req, res) => userController.create(req, res));
 userRoute.get('/', validateJWT, async (req, res) => userController.getAll(req, res));
+userRoute.get('/:id', validateJWT, async (req, res) => userController.getById(req, res));
 userRoute.delete('/:id', async (req, res) => userController.delete(req, res));
 
 export default userRoute;

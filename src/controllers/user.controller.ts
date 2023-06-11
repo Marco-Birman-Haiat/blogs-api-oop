@@ -6,10 +6,11 @@ import { JwtAuthorization } from "../utils/authFunctions";
 import getErrorCode from "../utils/httpError";
 
 export interface UserController {
-  getAll(req: Request, res: Response): Promise<Response>
-  create(req: Request, res: Response): Promise<Response>
-  getByEmail(req: Request, res: Response): Promise<Response>
-  delete(req: Request, res: Response): Promise<Response>
+  getAll(req: Request, res: Response): Promise<Response>;
+  getById(req: Request, res: Response): Promise<Response>;
+  create(req: Request, res: Response): Promise<Response>;
+  getByEmail(req: Request, res: Response): Promise<Response>;
+  delete(req: Request, res: Response): Promise<Response>;
 }
 
 export class UserControllerImpl implements UserController {
@@ -18,6 +19,17 @@ export class UserControllerImpl implements UserController {
   async getAll(req: Request, res: Response): Promise<Response> {
     const allUsers = await this.userService.getAll()
     return res.status(200).json(allUsers.data);
+  }
+
+  async getById(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const foundUser = await this.userService.getById(id);
+
+    if (foundUser.type === 'NOT_FOUND') {
+      return res.status(getErrorCode(foundUser.type)).json(foundUser.data);
+    }
+
+    return res.status(200).json(foundUser.data);
   }
 
   async getByEmail(req: Request, res: Response): Promise<Response> {

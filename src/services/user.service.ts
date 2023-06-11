@@ -8,6 +8,7 @@ type UserServiceResponse<T> = ServiceResponse<T>;
 
 export interface UserService {
   getAll(): Promise<UserServiceResponse<UserRecord[]>>;
+  getById(id: string): Promise<UserServiceResponse<UserRecord>>;
   create(user: UserInput): Promise<UserServiceResponse<UserRecord>>;
   getByEmail(email: string): Promise<UserServiceResponse<UserRecord>>
   delete(id: number): Promise<UserServiceResponse<null>>;
@@ -20,6 +21,13 @@ export class UserServiceImpl implements UserService {
   async getAll(): Promise<UserServiceResponse<UserRecord[]>> {
     const allUsers = await this.userRepository.getAll();
     return { type: 'OK', data: allUsers };
+  }
+
+  async getById(id: string): Promise<UserServiceResponse<UserRecord>> {
+    const foundUser = await this.userRepository.getById(Number(id));
+
+    if(!foundUser) return { type: 'NOT_FOUND', data: { message: 'user not found' } };
+    return { type: 'OK', data: foundUser };
   }
 
   async getByEmail(email: string): Promise<UserServiceResponse<UserRecord>> {

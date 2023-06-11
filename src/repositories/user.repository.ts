@@ -6,6 +6,7 @@ import UserRecord, { UserInput } from "./interfaces/user.record";
 
 export interface UserRepository {
   getAll(): Promise<UserRecord[]>;
+  getById(id: number): Promise<UserRecord | null>;
   create(user: UserInput): Promise<UserRecord>;
   getByEmail(email: string): Promise<UserEntity | null>;
   delete(id: number): Promise<void>;
@@ -17,11 +18,17 @@ export default class UserRepositoryImpl implements UserRepository {
     return allUsers.map((user) => this.getRecordFromModel(user))
   }
 
+  async getById(id: number): Promise<UserRecord | null> {
+    const foundUser = await UserModel.findByPk(id, { include: { model: BlogPostModel, as: 'blog_posts'}});
+    
+    if (!foundUser) return null
+    return this.getRecordFromModel(foundUser);
+  }
+
   async getByEmail(email: string): Promise<UserEntity | null> {
     const foundUser = await UserModel.findOne({ where: { email }});
     
     if (!foundUser) return null
-
     return foundUser.dataValues;
   }
 
