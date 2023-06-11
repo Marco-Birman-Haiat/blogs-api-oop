@@ -35,7 +35,7 @@ export class UserServiceImpl implements UserService {
   }
 
   async create(user: UserInput): Promise<UserServiceResponse<UserRecord>> {
-    const error = this.userValidation.validateCreate(user)
+    const error = await this.userValidation.validateCreate(user)
     if (error.type) return error;
     
     const createdUser = await this.userRepository.create(user);

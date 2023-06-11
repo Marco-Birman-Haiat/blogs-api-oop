@@ -4,7 +4,7 @@ import { UserRepository } from "../../repositories/user.repository";
 import { userCreateSchema } from "./schemas";
 
 export interface UserValidation {
-  validateCreate(received: UserInput): ValidationResponse<string>;
+  validateCreate(received: UserInput): Promise<ValidationResponse<string>>;
 }
 
 export class UserValidationImpl implements UserValidation {
@@ -13,10 +13,10 @@ export class UserValidationImpl implements UserValidation {
   constructor(private userRepository: UserRepository) {}
   
   
-  validateCreate(received: UserInput): ValidationResponse<string> {
+  async validateCreate(received: UserInput): Promise<ValidationResponse<string>> {
     try {
       this.validateCreateInput(received);
-      this.validateEmailInUse(received.email);
+      await this.validateEmailInUse(received.email);
       // this.validateCreateRequest(received);
     } catch (error) {
       return error as ValidationResponseError;
@@ -28,7 +28,8 @@ export class UserValidationImpl implements UserValidation {
   private async validateEmailInUse(receivedEmail: string): Promise<void> {
     const emailExists = await this.userRepository.getByEmail(receivedEmail);
     
-    if (emailExists) throw { type: 'CONFLICT', message: 'Email already in use' };
+    if (emailExists !== null) throw { type: 'CONFLICT', data: { message: 'Email already in use' } };
+    return;
   }
   
   private validateCreateInput(input: {}): void {

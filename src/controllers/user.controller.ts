@@ -3,6 +3,7 @@ import UserRecord, { UserInput } from "../repositories/interfaces/user.record";
 import { ControllerResponse } from "../repositories/types/controllerResponse";
 import { UserService } from "../services/user.service";
 import { JwtAuthorization } from "../utils/authFunctions";
+import getErrorCode from "../utils/httpError";
 
 export interface UserController {
   getAll(req: Request, res: Response): Promise<Response>
@@ -28,10 +29,12 @@ export class UserControllerImpl implements UserController {
 
   async create(req: Request, res: Response): Promise<Response> {
     const { displayName, email, password, image } = req.body;
-
-    
     
     const createdUser = await this.userService.create({ displayName, email, password, image });
+
+    if (createdUser.type === 'CONFLICT' || createdUser.type === 'UNPROCESSABLE_DATA') {
+      return res.status(getErrorCode(createdUser.type)).json(createdUser.data);
+    }
     return res.status(200).json(createdUser.data);
   }
 
