@@ -2,6 +2,7 @@ import BlogPostModel from "../database/models/blogPost.model";
 import UserModel from "../database/models/user.model";
 import { UserEntity } from "./entities/user.entity";
 import UserRecord, { UserInput } from "./interfaces/user.record";
+import bcrypt from 'bcrypt';
 
 
 export interface UserRepository {
@@ -33,7 +34,7 @@ export default class UserRepositoryImpl implements UserRepository {
   }
 
   async create(user: UserInput): Promise<UserRecord> {
-    const createdUser = await UserModel.create(user);
+    const createdUser = await UserModel.create({ ...user, password: bcrypt.hashSync(user.password, 10)});
     
     return this.getRecordFromModel(createdUser);
   }
