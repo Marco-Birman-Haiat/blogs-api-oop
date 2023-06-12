@@ -11,8 +11,8 @@ const categoryRepository = new CategoryRepositoryImpl();
 const categoryService = new CategoryServiceImpl(categoryRepository);
 const categoryController = new CategoryControllerImpl(categoryService);
 
-categoryRoute.get('/', async (req, res) => categoryController.getAll(req, res));
-categoryRoute.get('/:id', async (req, res) => categoryController.getById(req, res));
+categoryRoute.get('/', validateJWT, async (req, res) => categoryController.getAll(req, res));
+categoryRoute.get('/:id', validateJWT, async (req, res) => categoryController.getById(req, res));
 categoryRoute.post('/', validateJWT, validateCategoryCreate, async (req, res) => categoryController.create(req, res));
 
 export default categoryRoute;
