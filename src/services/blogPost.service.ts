@@ -11,6 +11,7 @@ export interface BlogPostService {
   create(blogPost: BlogPostUserInputCreate, categoryIds: number[]): Promise<BlogPostServiceResponse<BlogPostRecord>>;
   getAll(): Promise<BlogPostServiceResponse<BlogPostRecord[]>>
   update(postId: string, updateData: BlogPostUserInputEdit): Promise<BlogPostServiceResponse<BlogPostRecord>>
+  search(searchTerm: string): Promise<BlogPostServiceResponse<BlogPostRecord[]>>;
 }
 
 export default class BlogPostServiceImpl implements BlogPostService {
@@ -47,5 +48,11 @@ export default class BlogPostServiceImpl implements BlogPostService {
 
     const createBlogPost = await this.blogPostRepository.create(blogPostInput, categoryIds);
     return { type: 'CREATED', data: createBlogPost };
+  }
+
+  async search(searchTerm: string): Promise<BlogPostServiceResponse<BlogPostRecord[]>> {
+    const foundPosts = await this.blogPostRepository.search(searchTerm);
+
+    return { type: 'OK', data: foundPosts };
   }
 }

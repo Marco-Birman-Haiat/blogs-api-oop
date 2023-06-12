@@ -4,9 +4,10 @@ import { JwtAuthorization } from '../utils/authFunctions';
 import getErrorCode from '../utils/httpError';
 
 export interface BlogPostController {
-  create(req: Request, res: Response): Promise<Response>
-  getAll(req: Request, res: Response): Promise<Response>
-  update(req: Request, res: Response): Promise<Response>
+  create(req: Request, res: Response): Promise<Response>;
+  getAll(req: Request, res: Response): Promise<Response>;
+  update(req: Request, res: Response): Promise<Response>;
+  search(req: Request, res: Response): Promise<Response>;
 }
 
 export default class BlogPostControllerImpl implements BlogPostController {
@@ -39,5 +40,12 @@ export default class BlogPostControllerImpl implements BlogPostController {
     }
 
     return res.status(200).json(updatedBlogPost.data);
+  }
+
+  async search(req: Request, res: Response): Promise<Response> {
+    const { q: searchTerm } = req.query;
+    
+    const foundBlogPosts = await this.blogPostService.search(searchTerm as string);
+    return res.status(200).json(foundBlogPosts.data);
   }
 }

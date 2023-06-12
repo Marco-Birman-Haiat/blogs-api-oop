@@ -21,6 +21,7 @@ const blogPostService = new BlogPostServiceImpl(blogPostRepository, userReposito
 const blogPostContrller = new BlogPostControllerImpl(blogPostService);
 
 blogPostRoute.get('/', validateJWT, async (req, res) => blogPostContrller.getAll(req, res));
+blogPostRoute.get('/search', validateJWT, async (req, res) => blogPostContrller.search(req, res));
 blogPostRoute.post('/', validateJWT, blogPostCreateRequestValidation, async (req, res) => blogPostContrller.create(req, res));
 blogPostRoute.put('/:id', validateJWT, blogPostUpdateRequestValidation, async (req, res) => blogPostContrller.update(req, res));
 
