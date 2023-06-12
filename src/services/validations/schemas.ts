@@ -11,17 +11,19 @@ const userCreateSchema = Joi.object({
 //   name: Joi.required(),
 // });
 
-// const createBlogPostSchema = Joi.object({
-//   title: Joi.string().required(),
-//   content: Joi.string().required(),
-//   categoryIds: Joi.array().required(),
-// });
+const createBlogPostSchema = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+  categoryIds: Joi.array().items(Joi.number().integer().required().strict()),
+});
 
-// const updateBlogPostSchema = Joi.object({
-//   title: Joi.string().required(),
-//   content: Joi.string().required(),
-// });
+const updateBlogPostSchema = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+});
 
 export {
-  userCreateSchema
+  userCreateSchema,
+  updateBlogPostSchema,
+  createBlogPostSchema,
 };
