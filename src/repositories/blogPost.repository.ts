@@ -5,12 +5,14 @@ import BlogPostCategoryModel from "../database/models/blogPostCategory.model";
 import CategoryModel from "../database/models/category.model";
 import UserModel from "../database/models/user.model";
 import { BlogPostInput, BlogPostRecord, BlogPostUserInputEdit } from "./interfaces/blogPost.record";
+import { Op } from "sequelize";
 
 export interface BlogPostRepository {
   getAll(): Promise<BlogPostRecord[]>;
   getById(postId: number): Promise<BlogPostRecord | null>;
   create(blogPost: BlogPostInput, categoryIds: number[]): Promise<BlogPostRecord>;
   update(blogPost: BlogPostUserInputEdit, postId: number): Promise<void>;
+  search(searchTerm: string): Promise<BlogPostRecord[]>;
 }
 
 export default class BlogPostRepositoryImpl implements BlogPostRepository {
@@ -49,6 +51,22 @@ export default class BlogPostRepositoryImpl implements BlogPostRepository {
 
   async update(blogPost: BlogPostUserInputEdit, postId: number): Promise<void> {
     await BlogPostModel.update(blogPost, { where: { id: postId } });
+  }
+
+  async search(searchTerm: string): Promise<BlogPostRecord[]> {
+    const foundPosts = await BlogPostModel.findAll({
+      include: [
+        { model: UserModel, as: 'user', attributes: { exclude: ['password'] } },
+        { model: CategoryModel, as: 'categories' },
+      ],
+      where: {
+        [Op.or]: [
+          { title: { [Op.like]: `%${searchTerm}%` } },
+          { content: { [Op.like]: `%${searchTerm}%` } },
+        ]
+      }
+    });
+    return foundPosts.map((post) => post.dataValues);
   }
 
   private async insertBlogPostCategories(categoryIds: number[], createdPost: BlogPostModel, transaction: Transaction) {

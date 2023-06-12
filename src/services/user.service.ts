@@ -1,7 +1,6 @@
 import UserRecord, { UserInput } from "../repositories/interfaces/user.record";
 import { ServiceResponse } from "../repositories/types/serviceResponse";
 import { UserRepository } from "../repositories/user.repository";
-import { ValidationImpl } from "./validations/Validation";
 import { UserValidation } from "./validations/userValidations";
 
 type UserServiceResponse<T> = ServiceResponse<T>;

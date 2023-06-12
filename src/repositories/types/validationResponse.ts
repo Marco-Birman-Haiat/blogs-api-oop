@@ -4,7 +4,7 @@ type ValidationSuccessData<T> = '' | T;
 
 type ValidationResponseSuccess<T> = {
   type: null,
-  data: T,
+  data: ValidationSuccessData<T>,
 }
 
 export type ValidationResponseError = {
