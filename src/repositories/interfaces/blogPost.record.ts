@@ -19,13 +19,13 @@ export type BlogPostInput = {
   updated: Date;
 }
 
-export type BlogPostUserInput = {
-  title: string;
-  userId: number;
-  content: string;
-}
-
 export type BlogPostUserInputEdit = {
   title: string;
   content: string;
+}
+
+export type BlogPostUserInputCreate = {
+  title: string;
+  content: string;
+  userId: number;
 }
