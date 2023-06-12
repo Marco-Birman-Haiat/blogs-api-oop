@@ -15,6 +15,6 @@ export const validateJWT = (req: Request, _res: Response, next: NextFunction): v
     req.payload = payload.data;
     next();
   } catch (e) {
-    return next({ type: 401, message: 'Expired or invalid token' });
+    return next({ type: 'UNATHORIZED', message: 'Expired or invalid token' });
   }
 };

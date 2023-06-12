@@ -5,6 +5,6 @@ export const validateUserCreate = (req: Request, res: Response, next: NextFuncti
 
   const allFieldsExist = displayName && email && password;
 
-  if(!allFieldsExist) return next({ type: 400, message: 'Some required field is missing' });
+  if(!allFieldsExist) return next({ type: 'INVALID_DATA', message: 'Some required field is missing' });
   return next();
 }
