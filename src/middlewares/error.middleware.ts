@@ -10,6 +10,5 @@ type middlwareError = {
 }
 
 export const errorMiddleware = (error: middlwareError, req: Request, res: Response, next: NextFunction): Response => {
-  console.log('passou no middleware de erro', error);
   return res.status(getErrorCode(error.type)).json(error.data);
 };

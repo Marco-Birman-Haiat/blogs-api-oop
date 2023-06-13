@@ -1,5 +1,6 @@
 import express = require('express');
 import router from './routes';
+import { errorMiddleware } from './middlewares/error.middleware';
 
 class App {
   public app: express.Express;
@@ -8,15 +9,11 @@ class App {
     this.app = express();
 
     this.app.use(express.json());
-
-    this.routes();
-
-    // Não remover essa rota
-    this.app.get('/', (_req, res) => res.status(200).send('Trybeteca API no ar!'));
-  }
-
-  private routes(): void {
     this.app.use(router);
+
+    this.app.get('/', (_req, res) => res.status(200).send('API de Blogs no ar!'));
+
+    this.app.use(errorMiddleware);
   }
 
   public start(PORT: string | number):void {
