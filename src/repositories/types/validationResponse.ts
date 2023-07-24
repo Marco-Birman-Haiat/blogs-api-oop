@@ -1,16 +1,17 @@
-type ValidationResponseTypeError = 'UNATHORIZED' | 'NOT_FOUND' | 'INVALID_DATA' | 'UNPROCESSABLE_DATA';
-type ValidationResponseTypeSuccess = null;
+import { ResponseTypeError } from './reponse';
 
-type ValidationResponseSuccess = {
-  type: ValidationResponseTypeSuccess,
-  data: '',
+type ValidationSuccessData<T> = '' | T; 
+
+type ValidationResponseSuccess<T> = {
+  type: null,
+  data: ValidationSuccessData<T>,
 }
 
 export type ValidationResponseError = {
-  type: ValidationResponseTypeError,
+  type: ResponseTypeError,
   data: {
     message: string,
   }
 }
 
-export type ValidationResponse = ValidationResponseError | ValidationResponseSuccess;
+export type ValidationResponse<T> = ValidationResponseError | ValidationResponseSuccess<T>;

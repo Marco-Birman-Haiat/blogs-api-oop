@@ -1,0 +1,14 @@
+DROP DATABASE IF EXISTS blogs_api;
+CREATE DATABASE blogs_api;
+
+USE blogs_api;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT,
+  saldo DECIMAL(10, 2) NOT NULL,
+  email VARCHAR(30) NOT NULL,
+  tipo VARCHAR(30) NOT NULL,
+  limite DECIMAL(10, 2),
+	taxa_juros DECIMAL (10, 2),
+  PRIMARY KEY(id)
+);

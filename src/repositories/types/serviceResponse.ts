@@ -1,13 +1,12 @@
-type ServiceResponseTypeError = 'UNATHORIZED' | 'NOT_FOUND' | 'INVALID_DATA' | 'UNPROCESSABLE_DATA';
-type ServiceResponseTypeSuccess = 'OK' | 'CREATED';
+import { ResponseTypeError, ResponseTypeSuccess } from './reponse';
 
 type ServiceResponseSuccess<T> = {
-  type: ServiceResponseTypeSuccess,
+  type: ResponseTypeSuccess,
   data: T,
 }
 
 type ServiceResponseError = {
-  type: ServiceResponseTypeError,
+  type: ResponseTypeError,
   data: {
     message: string,
   }

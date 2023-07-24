@@ -1,8 +1,8 @@
-export class CategoryRecord {
+export type CategoryRecord = {
   id: number;
   name: string;
 }
 
-export class CategoryInput {
+export type CategoryInput = {
   name: string;
 }
